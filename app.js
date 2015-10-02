@@ -2,11 +2,15 @@ var express = require('express'),
   config = require('./config/config')
 
 var app = express(),
-    x = require('./app/DB.js');
+  database = require('./app/DB.js'),
+  TasksRepo = require('./app/TaskRepo.js')
+
+var falcorExpress = require('falcor-express'),
+      Router = require('falcor-router');
 
 require('./config/express')(app, config);
 
-x.reinitialize()
+database.reinitialize()
   .then(knex => {
     //this code is ran before the create
     // ok
@@ -30,13 +34,27 @@ x.reinitialize()
     // call the create function to create all the models
     var models = factory.create(schema);
     console.log(models);
+    var tasks = models.tasks;
     // forge the model and get all of its resources
-    models.tasks.forge().getResources().then(function(results) {
+    tasks.forge().getResources().then(function(results) {
 
       // pretty print the results to the console
-      console.log(JSON.stringify(results, null, ' '));3
+      console.log(JSON.stringify(results, null, ' '));
     });
-  });
+
+    tasks.collection().fetch().then(function(collection) {
+      // console.log(collection);
+    })
+
+    var newTask = new tasks({
+      description: "newly added task!!!!!!"
+    })
+
+    TasksRepo.create(newTask)
+      .then(_ => TasksRepo.read(newTask))
+      .then(_ => TasksRepo.update(newTask, "updated task!!!!"))
+      .then(_ => TasksRepo.delete(newTask));
+  })
 
 app.listen(config.port, function() {
   console.log('Express server listening on port ' + config.port);

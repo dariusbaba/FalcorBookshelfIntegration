@@ -1,5 +1,7 @@
 var config = require('../config/config.js'),
-  databaseName = 'test'
+  knexBuilder = require('knex'),
+  knexSchema = require('knex-schema'),
+  databaseName = 'test';
 
 var tasks = {
   tableName: 'tasks',
@@ -21,8 +23,8 @@ var tasks = {
 var createTables = function() {
   config.connection.database = databaseName
   //aici il facem din nou..o
-  knex = require('knex')(config); // now we connect to the newly created DB
-  var Manager = require('knex-schema');
+  knex = knexBuilder(config); // now we connect to the newly created DB
+  var Manager = knexSchema
   var manager = new Manager(knex);
   //create/update tables
 
@@ -37,7 +39,7 @@ var createTables = function() {
 // manager.reset([articles]); // Remove all data from articles.
 // manager.drop([articles]); // Drop table articles.
 
-var knex = require('knex')(config);
+var knex = knexBuilder(config);
 
 
 // ruleaza cu babel nu?
@@ -45,8 +47,8 @@ var knex = require('knex')(config);
 // dada...desi am avu cevapb a let
 // lambdas merg..nush daca si let
 function dropDatabase() {
+  console.log('db: dropping database..');
   var dropCommand = 'DROP DATABASE IF EXISTS ' + databaseName;
-
   return knex.raw(dropCommand);
 }
 
