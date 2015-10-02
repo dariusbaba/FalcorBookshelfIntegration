@@ -3,16 +3,16 @@ var TasksRepo = {
     console.log("creating a new tasks...");
     return newTask.save().then(
       model => {
-        console.log('created task');
         console.log(model);
+        console.log(' ---- created task ----');
       })
   },
   read: task => {
     console.log(task);
     return task.fetch().then(
       model => {
-        console.log('tasks fetched');
         console.log(model);
+        console.log(' ---- tasks fetched ---- ');
       }
     )
   },
@@ -24,8 +24,8 @@ var TasksRepo = {
       patch: true
     }).then(
       model => {
-        console.log('task updated');
         console.log(model);
+        console.log(' ---- task updated ---- ');
       }
     )
   },
@@ -34,8 +34,8 @@ var TasksRepo = {
     console.log('deleting task');
     return task.destroy().then(
       _ => {
-        console.log('task deleted');
         console.log(_);
+        console.log(' ---- task deleted ---- ');
       }
     )
   }

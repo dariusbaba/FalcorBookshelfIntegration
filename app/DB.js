@@ -22,15 +22,11 @@ var tasks = {
 
 var createTables = function() {
   config.connection.database = databaseName
-  //aici il facem din nou..o
   knex = knexBuilder(config); // now we connect to the newly created DB
   var Manager = knexSchema
   var manager = new Manager(knex);
   //create/update tables
 
-  //aci era problema
-  // din create tables nu returnezi promise
-  //
   return manager.sync([tasks])
     .then(_ => console.log('db: created tasks table'))
     .then(_ => manager.populate([tasks]))
@@ -42,10 +38,6 @@ var createTables = function() {
 var knex = knexBuilder(config);
 
 
-// ruleaza cu babel nu?
-// poti folosi lambdas?
-// dada...desi am avu cevapb a let
-// lambdas merg..nush daca si let
 function dropDatabase() {
   console.log('db: dropping database..');
   var dropCommand = 'DROP DATABASE IF EXISTS ' + databaseName;
@@ -64,8 +56,6 @@ function destroyConnection() {
 
 function reinitialize() {
   console.log('db: reinitializing..');
-  // asta nu e aceiasi treaba? atata ca nu mai faci un promise explicit nou.? k.ms
-  // ba da e acelasi lucru dar e mai putin cod
   return dropDatabase()
     .then(createDatabase)
     .then(destroyConnection)
