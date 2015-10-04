@@ -15,7 +15,8 @@ var config = {
       host: 'localhost',
       user: 'dbaba',
       password: '',
-      charset: 'utf8'
+      charset: 'utf8',
+      database:'test'
     }
   },
 

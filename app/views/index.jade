@@ -1,5 +1,55 @@
 extends layout
 
 block content
+  script(src='//netflix.github.io/falcor/build/falcor.browser.js')
   h1= title
   p Welcome to #{title}
+
+  #event-data
+
+  button(onclick='showAll()') Get all tasks
+  button(onclick='getSecondTask()') Get second task
+  button(onclick='updateSecondTask()') Update second task 
+  button(onclick='deleteSecondTask()') Delete second task
+  
+  script.
+        var showAll = function() {
+        var from = 1 , to = 2
+         
+        var model = new falcor.Model({source: new falcor.HttpDataSource('/model.json') });
+              model.
+               get(['tasks',{from:  from , to: to},'description']).
+               then(function(response) {
+               var html = "<ul>";
+               var task;
+                 for (var i = from; i <= to; i++) {
+                 task = response.json.tasks[i];
+               if (task)
+                   html += "<li>" + task.description + "</li>";
+               }
+                 document.getElementById('event-data').innerHTML = html;
+                 });
+          }
+        
+          var getSecondTask = function() {
+          var model = new falcor.Model({source: new falcor.HttpDataSource('/model.json') });
+                model.
+                 getValue(['tasks',2,'description']).
+                 then(function(response) {
+                   document.getElementById('event-data').innerHTML = response;
+                   });
+          }
+          
+          var updateSecondTask = function (){
+          var model = new falcor.Model({source: new falcor.HttpDataSource('/model.json') });
+                model.setValue(["tasks", 2,"Task 2 updated"], true).
+                then(function(done){
+                  var c = model;
+                  document.getElementById('event-data').innerHTML = done;
+                  });
+                  
+          }
+          
+          var deleteSecondTask = function (){
+          
+          }
